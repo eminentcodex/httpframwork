@@ -20,11 +20,7 @@ func RegisterHeartbeat(cont *container.Container, conf *viper.Viper) (string, st
 		},
 	}
 
-	return "heartbeat", "/heartbeat", http.MethodGet, func(writer http.ResponseWriter, request *http.Request) {
-		h.Request = request
-		h.Response = writer
-		h.handler()
-	}
+	return h.GetHandler("heartbeat", "/heartbeat", http.MethodGet, h.handler)
 }
 
 // Perform the logic here
@@ -34,5 +30,6 @@ func (h *Heartbeat) handler() {
 		"Message": "success",
 	}
 
+	h.Status = http.StatusOK
 	h.ResponseJSON(res)
 }

@@ -7,6 +7,7 @@ const (
 
 const (
 	DefaultConfigPath = "./configs"
+	DefaultDateTimeFormat = "2006-01-02 15:04:05"
 )
 
 // Application Config keys
@@ -16,4 +17,5 @@ const (
 	SSLKeyPath      = "app.ssl.key"
 	AppDomain       = "app.domain"
 	AppEnvironment  = "app.environment"
+	AppLogFolder    = "app.app_log"
 )

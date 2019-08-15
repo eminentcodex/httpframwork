@@ -3,6 +3,7 @@ package app
 import (
 	"net/http"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"httpframwork/app/api"
 	"httpframwork/app/middleware"
@@ -14,6 +15,31 @@ type AppRoutes struct {
 	Method  string
 	Handler http.HandlerFunc
 }
+
+var (
+	allowedOrigin = []string{"*"}
+
+	allowedHeaders = []string{"" +
+		"X-Requested-With",
+		"Content-Type",
+		"X-CustomHeader",
+		"Keep-Alive",
+		"User-Agent",
+		"X-Requested-With",
+		"If-Modified-Since",
+		"Cache-Control",
+		"Authorization",
+	}
+
+	allowedMethods = []string{
+		"OPTIONS",
+		"HEAD",
+		"GET",
+		"POST",
+		"PUT",
+		"DELETE",
+	}
+)
 
 func (r AppRoutes) New(name, path, method string, handler http.HandlerFunc) (*AppRoutes) {
 
@@ -28,7 +54,7 @@ func (r AppRoutes) New(name, path, method string, handler http.HandlerFunc) (*Ap
 }
 
 // Prepare routes
-func (a *Application) prepareRoutes() *mux.Router {
+func (a *Application) prepareRoutes() http.Handler {
 
 	router := mux.NewRouter()
 
@@ -47,10 +73,18 @@ func (a *Application) prepareRoutes() *mux.Router {
 	}
 
 	a.initMiddleware(router)
-
+	originsOk := handlers.AllowedOrigins(allowedOrigin)
+	headersOk := handlers.AllowedHeaders(allowedHeaders)
+	methodsOk := handlers.AllowedMethods(allowedMethods)
 	//nrgorilla.InstrumentRoutes(a.Server.Router, a.NewRelic)
 
-	return router
+	handler := handlers.LoggingHandler(
+		a.Log.Writer(),
+		handlers.CORS(originsOk, headersOk, methodsOk)(func(m *mux.Router) http.Handler {
+			return m
+		}(router)), )
+
+	return handler
 }
 
 func (a *Application) initMiddleware(router *mux.Router) {

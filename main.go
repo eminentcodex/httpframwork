@@ -15,5 +15,7 @@ func main() {
 		log.Fatal("failed to start the server: " + err.Error())
 	}
 
-	application.Run()
+	if err := application.Run(); err != nil {
+		panic(err)
+	}
 }

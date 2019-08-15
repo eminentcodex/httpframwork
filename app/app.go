@@ -118,7 +118,7 @@ func (a *Application) Run() (err error) {
 		pURL            *url.URL
 	)
 
-	router := a.prepareRoutes()
+	handler := a.prepareRoutes()
 
 	if pURL, err = url.ParseRequestURI(a.Domain); err != nil {
 		return
@@ -131,7 +131,6 @@ func (a *Application) Run() (err error) {
 	}
 
 	// if SSL enabled then init TLS
-
 	if true == a.Config.GetBool(constant.SSLEnabled) {
 		TLSCert = a.Config.GetString(constant.SSLCertFilePath)
 		TLSKey = a.Config.GetString(constant.SSLKeyPath)
@@ -149,5 +148,5 @@ func (a *Application) Run() (err error) {
 		}
 	}
 
-	return http.Serve(ln, router)
+	return http.Serve(ln, handler)
 }
