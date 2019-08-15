@@ -1,0 +1,23 @@
+app:
+  name: GO Http Framework
+  #  domain: https://localhost:443
+  domain: http://localhost:8080
+  environment: local
+  app_log: /var/log/gohttp
+  ssl:
+    enabled: true
+    cert: ./server.crt
+    key: ./server.key
+  newrelic:
+    enabled: true
+    key: 1afebf4f676c8c68e7fe08431dc1600120344ac6
+    name: GO HTTP APPLICATION
+  database:
+    driver: mysql
+    host: localhost
+    user: root
+    password: password
+    db_name: gohttp
+  cache:
+    name: memacache
+    server: localhost:11211

@@ -1,0 +1,16 @@
+en:
+  db_connection_failed:
+    status: 400
+    msg: Failed to connect to %s database
+  invalid_query:
+    status: 400
+    msg: Invalid datbase query
+  no_documents_found:
+    status: 400
+    msg: No matching documents found
+  invalid_offer_id_aff_id:
+    status: 400
+    msg: Invalid offer_id / aff_id
+  missing_get_param:
+    status: 400
+    msg: Missing get params
