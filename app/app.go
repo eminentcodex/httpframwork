@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -58,7 +59,8 @@ func (a *Application) initConfig() (err error) {
 
 	log.Println("Searching for application configuration file...")
 	if path == "" {
-		a.Config.AddConfigPath(constant.DefaultConfigPath) // look for config in the working directory
+		p, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+		a.Config.AddConfigPath(p + constant.DefaultConfigPath) // look for config in the working directory
 		log.Println("Loading configs from default location...")
 	} else {
 		a.Config.AddConfigPath(path)

@@ -30,8 +30,8 @@ type Api struct {
 	Status    int
 }
 
-func (api *Api) GetHandler(name string, path string, method string, handler func()) (string, string, string, http.HandlerFunc) {
-	return name, path, method, func(writer http.ResponseWriter, request *http.Request) {
+func (api *Api) GetHandler(name string, path string, methods []string, handler func()) (string, string, []string, http.HandlerFunc) {
+	return name, path, methods, func(writer http.ResponseWriter, request *http.Request) {
 		api.Name = name
 		api.Request = request
 		api.Response = writer

@@ -12,7 +12,7 @@ import (
 type AppRoutes struct {
 	Name    string
 	Path    string
-	Method  string
+	Method  []string
 	Handler http.HandlerFunc
 }
 
@@ -41,12 +41,12 @@ var (
 	}
 )
 
-func (r AppRoutes) New(name, path, method string, handler http.HandlerFunc) (*AppRoutes) {
+func (r AppRoutes) New(name, path string, methods []string, handler http.HandlerFunc) (*AppRoutes) {
 
 	rt := &AppRoutes{
 		Name:    name,
 		Path:    path,
-		Method:  method,
+		Method:  methods,
 		Handler: handler,
 	}
 
@@ -69,7 +69,7 @@ func (a *Application) prepareRoutes() http.Handler {
 			Path(r.Path).
 			Name(r.Name).
 			HandlerFunc(r.Handler).
-			Methods(r.Method)
+			Methods(r.Method...)
 	}
 
 	a.initMiddleware(router)

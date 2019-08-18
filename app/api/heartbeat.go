@@ -12,7 +12,7 @@ type Heartbeat struct {
 }
 
 // Registers handle function with the router
-func RegisterHeartbeat(cont *container.Container, conf *viper.Viper) (string, string, string, http.HandlerFunc) {
+func RegisterHeartbeat(cont *container.Container, conf *viper.Viper) (string, string, []string, http.HandlerFunc) {
 	h := &Heartbeat{
 		Api{
 			Container: cont,
@@ -20,7 +20,7 @@ func RegisterHeartbeat(cont *container.Container, conf *viper.Viper) (string, st
 		},
 	}
 
-	return h.GetHandler("heartbeat", "/heartbeat", http.MethodGet, h.handler)
+	return h.GetHandler("heartbeat", "/heartbeat", []string{http.MethodGet}, h.handler)
 }
 
 // Perform the logic here

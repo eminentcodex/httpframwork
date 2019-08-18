@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"os"
+	"path/filepath"
 	"sync"
 
 	"github.com/spf13/viper"
@@ -26,7 +27,8 @@ type (
 )
 
 const (
-	InstanceKey = "Errors"
+	InstanceKey      = "Errors"
+	DefaultErrorLang = "en"
 )
 
 // GetRegistry function ...
@@ -84,7 +86,8 @@ func (me *errorsCache) RetrieveErrors() (err error) {
 
 	log.Println("Searching for error configuration file...")
 	if path == "" {
-		conf.AddConfigPath(constant.DefaultConfigPath) // look for config in the working directory
+		p, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+		conf.AddConfigPath(p+constant.DefaultConfigPath) // look for config in the working directory
 		log.Println("Loading error configs from default location...")
 	} else {
 		conf.AddConfigPath(path)
@@ -96,6 +99,9 @@ func (me *errorsCache) RetrieveErrors() (err error) {
 		return
 	}
 
+	if errorLang == "" {
+		errorLang = DefaultErrorLang
+	}
 	errs := conf.Get(errorLang)
 	if errs == nil {
 		return errors.New("no errors defined")
